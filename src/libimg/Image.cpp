@@ -405,7 +405,7 @@ void Image::fillCircleCacheImage(int x_centre, int y_centre, int radius, uint32_
             if (d > (radius + 0.5)) {
                 alpha = 0; // Definitely outside
             } else if (d < (radius - 0.5)) {
-                alpha = 255; // Definitely inside
+                alpha = (color >> 24) & 0xFF; // Definitely inside
             } else {
                 alpha = ((radius + 0.5) - d) * 255; // Border, so alpha blend for anti-aliasing
             }
