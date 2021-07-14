@@ -564,6 +564,30 @@ void Image::fillRectangle(int x0, int y0, int x1, int y1, uint32_t color) {
     }
 }
 
+void Image::drawPolygon(int polyCorners, int polyX[], int polyY[], uint32_t color) {
+    for (int i = 0; i < polyCorners - 1; i++) {
+        drawLineAA(polyX[i], polyY[i], polyX[i + 1], polyY[i + 1], color);
+    }
+}
+
+void Image::fillPolygon(int polyCorners, int polyX[], int polyY[], uint32_t color) {
+    for (int y = 0; y < height; y++) {
+        for (int x = 0; x < width; x++) {
+            bool pointInPolygon = false;
+            int i, j;
+            for (i = 0, j = polyCorners - 1; i < polyCorners; j = i++) {
+                if (((polyY[i] > y) != (polyY[j] > y)) && (x < (polyX[j] - polyX[i]) * (y - polyY[i]) / (polyY[j] - polyY[i]) + polyX[i])) {
+                    pointInPolygon = !pointInPolygon;
+                }
+            }
+            if (pointInPolygon) {
+                blendPixel(x, y, color);
+            }
+        }
+    }
+}
+
+
 void Image::copyTo(Image& dst, int srcX, int srcY) {
     int copyWidth = dst.getWidth();
     int copyHeight = dst.getHeight();

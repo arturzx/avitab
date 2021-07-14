@@ -87,6 +87,8 @@ public:
     void drawRectangle(int x0, int y0, int x1, int y1, uint32_t color);
     void fillRectangle(int x0, int y0, int x1, int y1, int x2, int y2, int x3, int y3, uint32_t color);
     void fillRectangle(int x0, int y0, int x1, int y1, uint32_t color);
+    void drawPolygon(int polyCorners, int polyX[], int polyY[], uint32_t color);
+    void fillPolygon(int polyCorners, int polyX[], int polyY[], uint32_t color);
     void drawText(const std::string &text, int size, int x, int y, uint32_t fgColor, uint32_t bgColor, Align al);
     int  getTextWidth(const std::string text, int size);
 
