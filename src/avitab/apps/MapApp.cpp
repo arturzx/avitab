@@ -36,6 +36,15 @@ MapApp::MapApp(FuncsPtr funcs):
 {
     overlayConf = api().getSettings()->getOverlayConfig();
 
+    try {
+        ivaoEnabled = api().getConfig()->getBool("/IVAO/enabled");
+    } catch (std::exception &) {
+    }
+
+    if (!ivaoEnabled) {
+        overlayConf->drawIVAOATCs = false;
+    }
+
     window->setOnClose([this] () { exit(); });
     window->addSymbol(Widget::Symbol::LIST, std::bind(&MapApp::onSettingsButton, this));
     window->addSymbol(Widget::Symbol::SETTINGS, std::bind(&MapApp::onOverlaysButton, this));
@@ -247,6 +256,9 @@ void MapApp::setTileSource(std::shared_ptr<img::TileSource> source) {
     map->loadOverlayIcons(api().getDataPath() + "icons/");
     map->setRedrawCallback([this] () { onRedrawNeeded(); });
     map->setNavWorld(api().getNavWorld());
+    if (ivaoEnabled) {
+        map->setIVAO(api().getIVAO());
+    }
 
     keyboard.reset();
     coordsField.reset();
@@ -264,6 +276,7 @@ void MapApp::resetWidgets() {
     airstripCheckbox.reset();
     heliseaportCheckbox.reset();
     myAircraftCheckbox.reset();
+    ivaoAtcCheckbox.reset();
     otherAircraftCheckbox.reset();
     overlaysContainer.reset();
 }
@@ -370,6 +383,13 @@ void MapApp::showOverlaySettings() {
     waypointCheckbox->setChecked(overlayConf->drawWaypoints);
     waypointCheckbox->alignRightOf(ilsCheckbox);
     waypointCheckbox->setCallback([this] (bool checked) { overlayConf->drawWaypoints = checked; });
+
+    if (ivaoEnabled) {
+        ivaoAtcCheckbox = std::make_shared<Checkbox>(overlaysContainer, "IVAO ATC");
+        ivaoAtcCheckbox->setChecked(overlayConf->drawIVAOATCs);
+        ivaoAtcCheckbox->alignBelow(vorCheckbox);
+        ivaoAtcCheckbox->setCallback([this] (bool checked) { overlayConf->drawIVAOATCs = checked; });
+    }
 }
 
 void MapApp::onRedrawNeeded() {

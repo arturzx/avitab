@@ -22,8 +22,10 @@
 #include <functional>
 #include "src/libimg/stitcher/Stitcher.h"
 #include "src/libxdata/world/World.h"
+#include "src/libivao/IVAO.h"
 #include "src/libimg/TTFStamper.h"
 #include "src/environment/Environment.h"
+#include "OverlayedIVAOATC.h"
 #include "OverlayHelper.h"
 #include "OverlayConfig.h"
 
@@ -37,6 +39,7 @@ public:
     void loadOverlayIcons(const std::string &path);
     void setRedrawCallback(OverlaysDrawnCallback cb);
     void setNavWorld(std::shared_ptr<xdata::World> world);
+    void setIVAO(std::shared_ptr<ivao::IVAO> ivao);
 
     void pan(int dx, int dy);
 
@@ -87,6 +90,8 @@ private:
     std::shared_ptr<OverlayConfig> overlayConfig;
     std::shared_ptr<xdata::World> navWorld;
     std::vector<avitab::Location> planeLocations;
+    std::shared_ptr<ivao::IVAO> ivao;
+    std::map<std::string, std::shared_ptr<OverlayedIVAOATC>> ivaoAtcs;
     img::Image planeIcon;
     img::Image ndbIcon;
     int calibrationStep = 0;
@@ -101,6 +106,7 @@ private:
     void drawOtherAircraftOverlay();
     void drawDataOverlays();
     void drawCalibrationOverlay();
+    void drawIVAOOverlay();
     void drawScale(double nmPerPixel);
 
     void pixelToPosition(int px, int py, double &lat, double &lon) const;

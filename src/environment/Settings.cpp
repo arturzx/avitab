@@ -106,6 +106,7 @@ void Settings::loadOverlayConfig() {
     overlayConfig->drawNDBs = getSetting("/overlay/NDBs", false);
     overlayConfig->drawILSs = getSetting("/overlay/ILSs", false);
     overlayConfig->drawWaypoints = getSetting("/overlay/waypoints", false);
+    overlayConfig->drawIVAOATCs = getSetting("/overlay/IVAOATCs", false);
 }
 
 void Settings::saveOverlayConfig() {
@@ -118,6 +119,7 @@ void Settings::saveOverlayConfig() {
     setSetting("/overlay/NDBs", overlayConfig->drawNDBs);
     setSetting("/overlay/ILSs", overlayConfig->drawILSs);
     setSetting("/overlay/waypoints", overlayConfig->drawWaypoints);
+    setSetting("/overlay/IVAOATCs", overlayConfig->drawIVAOATCs);
 }
 
 void Settings::upgrade() {

@@ -30,6 +30,7 @@ struct OverlayConfig {
     bool drawNDBs = false;
     bool drawILSs = false;
     bool drawWaypoints = false;
+    bool drawIVAOATCs = false;
 };
 
 } /* namespace maps */

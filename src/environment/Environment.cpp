@@ -17,6 +17,7 @@
  */
 
 #include "Environment.h"
+#include "src/libivao/IVAO.h"
 #include "src/Logger.h"
 #include "src/platform/CrashHandler.h"
 
@@ -43,6 +44,14 @@ void Environment::loadSettings() {
 
 std::shared_ptr<Settings> Environment::getSettings() {
     return settings;
+}
+
+void Environment::loadIVAO(std::string &apiKey) {
+    ivao = std::make_shared<ivao::IVAO>(apiKey);
+}
+
+std::shared_ptr<ivao::IVAO> Environment::getIVAO() {
+    return ivao;
 }
 
 std::shared_ptr<xdata::World> Environment::loadNavWorldAsync() {

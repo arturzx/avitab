@@ -30,6 +30,7 @@ public:
     virtual std::shared_ptr<img::Image> getMapImage() = 0;
     virtual void positionToPixel(double lat, double lon, int &px, int &py) const = 0;
     virtual void positionToPixel(double lat, double lon, int &px, int &py, int zoomLevel) const = 0;
+    virtual void pixelToPosition(int px, int py, double& lat, double& lon) const = 0;
     virtual double getMapWidthNM() const = 0;
     virtual int getNumAerodromesVisible() const = 0;
     virtual OverlayConfig &getOverlayConfig() const = 0;

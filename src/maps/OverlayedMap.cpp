@@ -18,8 +18,10 @@
 #include <cstring>
 #include <algorithm>
 #include <cmath>
+#include <iostream>
 #include "OverlayedMap.h"
 #include "OverlayedNode.h"
+#include "OverlayedIVAOATC.h"
 #include "src/Logger.h"
 
 namespace maps {
@@ -72,6 +74,10 @@ void OverlayedMap::loadOverlayIcons(const std::string& path) {
 
 void OverlayedMap::setNavWorld(std::shared_ptr<xdata::World> world) {
     navWorld = world;
+}
+
+void OverlayedMap::setIVAO(std::shared_ptr<ivao::IVAO> ivao_) {
+    ivao = ivao_;
 }
 
 void OverlayedMap::centerOnWorldPos(double latitude, double longitude) {
@@ -235,7 +241,8 @@ void OverlayedMap::drawDataOverlays() {
         return;
     }
     if (!overlayConfig->drawAirports && !overlayConfig->drawAirstrips && !overlayConfig->drawHeliportsSeaports &&
-        !overlayConfig->drawVORs && !overlayConfig->drawNDBs && !overlayConfig->drawILSs && !overlayConfig->drawWaypoints) {
+        !overlayConfig->drawVORs && !overlayConfig->drawNDBs && !overlayConfig->drawILSs && !overlayConfig->drawWaypoints &&
+        !overlayConfig->drawIVAOATCs) {
         return;
     }
 
@@ -275,6 +282,8 @@ void OverlayedMap::drawDataOverlays() {
         }
     });
 
+    drawIVAOOverlay();
+
     numAerodromesVisible = overlayedAerodromes.size();
     LOG_INFO(dbg, "%d aerodromes, %d fixes visible", numAerodromesVisible, overlayedFixes.size());
 
@@ -303,6 +312,43 @@ void OverlayedMap::drawDataOverlays() {
         stitcher->getZoomLevel(), deltaLon, nmPerPixel, mapWidthNM);
 
     drawScale(nmPerPixel);
+}
+
+void OverlayedMap::drawIVAOOverlay() {
+    auto zoomLevel = getZoomLevel();
+
+    if (!overlayConfig->drawIVAOATCs || zoomLevel < 3) {
+        return;
+    }
+
+    std::set<std::string> atcs;
+    ivao->forEachATC([this, &atcs] (std::shared_ptr<ivao::IVAOATC> atc) {
+        auto callsign = atc->callsign;
+        if (ivaoAtcs.find(callsign) == ivaoAtcs.end()) {
+            logger::verbose("New IVAO ATC: %s", callsign.c_str());
+            ivaoAtcs[callsign] = std::make_shared<OverlayedIVAOATC>(shared_from_this(), atc);
+        }
+        atcs.insert(callsign);
+    });
+    for(auto it = ivaoAtcs.begin(); it != ivaoAtcs.end(); ) {
+        auto callsign = it->first;
+        if (atcs.find(callsign) == atcs.end()) {
+            logger::verbose("Deleted IVAO ATC: %s", callsign.c_str());
+            it = ivaoAtcs.erase(it);
+        } else {
+            ++it;
+        }
+    }
+
+    ivao->forEachATC([this] (std::shared_ptr<ivao::IVAOATC> atc) {
+        ivaoAtcs[atc->callsign]->drawGraphics();
+    });
+
+    if (zoomLevel >= 6) {
+        ivao->forEachATC([this, &zoomLevel] (std::shared_ptr<ivao::IVAOATC> atc) {
+            ivaoAtcs[atc->callsign]->drawText(zoomLevel >= 7);
+        });
+    }
 }
 
 double OverlayedMap::getMapWidthNM() const {

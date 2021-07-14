@@ -23,7 +23,9 @@
 #include "src/charts/libnavigraph/NavigraphAPI.h"
 #include "src/charts/ChartService.h"
 #include "src/libxdata/XData.h"
+#include "src/libivao/IVAO.h"
 #include "src/environment/Environment.h"
+#include "src/environment/Config.h"
 #include "src/gui_toolkit/widgets/Container.h"
 #include "src/gui_toolkit/widgets/Label.h"
 #include "src/avitab/apps/AppFunctions.h"
@@ -58,6 +60,7 @@ public:
     void showGUIContainer(std::shared_ptr<Container> container) override;
     void onHomeButton() override;
     std::shared_ptr<xdata::World> getNavWorld() override;
+    std::shared_ptr<ivao::IVAO> getIVAO() override;
     double getMagneticVariation(double lat, double lon) override;
     void reloadMetar() override;
     void close() override;
@@ -67,6 +70,7 @@ public:
     Location getAircraftLocation(AircraftID id) override;
     float getLastFrameTime() override;
     std::shared_ptr<Settings> getSettings() override;
+    std::shared_ptr<Config> getConfig() override;
 
     ~AviTab();
 

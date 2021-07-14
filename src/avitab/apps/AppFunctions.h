@@ -50,6 +50,7 @@ public:
     virtual void showGUIContainer(std::shared_ptr<Container> container) = 0;
     virtual void onHomeButton() = 0;
     virtual std::shared_ptr<xdata::World> getNavWorld() = 0;
+    virtual std::shared_ptr<ivao::IVAO> getIVAO() = 0;
     virtual void reloadMetar() = 0;
     virtual double getMagneticVariation(double lat, double lon) = 0;
     virtual void close() = 0;
@@ -59,6 +60,7 @@ public:
     virtual Location getAircraftLocation(AircraftID id) = 0;
     virtual float getLastFrameTime() = 0;
     virtual std::shared_ptr<Settings> getSettings() = 0;
+    virtual std::shared_ptr<Config> getConfig() = 0;
     virtual ~AppFunctions() = default;
 };
 

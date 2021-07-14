@@ -35,6 +35,17 @@ AviTab::AviTab(std::shared_ptr<Environment> environment):
     if (env->getConfig()->getBool("/AviTab/loadNavData")) {
         env->loadNavWorldInBackground();
     }
+    bool ivaoEnabled = false;
+    std::string ivaoApiKey = "";
+    try {
+        ivaoEnabled = env->getConfig()->getBool("/IVAO/enabled");
+        ivaoApiKey = env->getConfig()->getString("/IVAO/apiKey");
+    } catch (std::exception &) {
+    }
+
+    if (ivaoEnabled) {
+        env->loadIVAO(ivaoApiKey);
+    }
     chartService = std::make_shared<apis::ChartService>(env->getProgramPath() + "/Navigraph/");
     jsRuntime = std::make_shared<js::Runtime>();
     env->resumeEnvironmentJobs();
@@ -338,6 +349,10 @@ std::shared_ptr<xdata::World> AviTab::getNavWorld() {
     return env->getNavWorld();
 }
 
+std::shared_ptr<ivao::IVAO> AviTab::getIVAO() {
+    return env->getIVAO();
+}
+
 void AviTab::executeLater(std::function<void()> func) {
     guiLib->executeLater(func);
 }
@@ -382,6 +397,10 @@ float AviTab::getLastFrameTime() {
 
 std::shared_ptr<Settings> AviTab::getSettings() {
     return env->getSettings();
+}
+
+std::shared_ptr<Config> AviTab::getConfig() {
+    return env->getConfig();
 }
 
 void AviTab::onHomeButton() {

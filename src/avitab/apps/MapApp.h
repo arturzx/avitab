@@ -73,7 +73,7 @@ private:
     std::shared_ptr<Label> overlayLabel;
     std::shared_ptr<Checkbox> myAircraftCheckbox, otherAircraftCheckbox;
     std::shared_ptr<Checkbox> airportCheckbox, heliseaportCheckbox, airstripCheckbox;
-    std::shared_ptr<Checkbox> vorCheckbox, ndbCheckbox, ilsCheckbox, waypointCheckbox;
+    std::shared_ptr<Checkbox> vorCheckbox, ndbCheckbox, ilsCheckbox, waypointCheckbox, ivaoAtcCheckbox;
 
     std::unique_ptr<MessageBox> messageBox;
     std::shared_ptr<TextArea> coordsField;
@@ -82,6 +82,7 @@ private:
     Timer updateTimer;
     bool trackPlane = true;
     bool suspended = true;
+    bool ivaoEnabled = false;
 
     int panPosX = 0, panPosY = 0;
 

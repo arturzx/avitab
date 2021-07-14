@@ -26,6 +26,7 @@
 #include <future>
 #include <atomic>
 #include "src/libxdata/XData.h"
+#include "src/libivao/IVAO.h"
 #include "src/gui_toolkit/LVGLToolkit.h"
 #include "EnvData.h"
 #include "Config.h"
@@ -60,6 +61,8 @@ public:
     std::shared_ptr<Settings> getSettings();
     void loadNavWorldInBackground();
     bool isNavWorldReady();
+    void loadIVAO(std::string &apiKey);
+    std::shared_ptr<ivao::IVAO> getIVAO();
     virtual void onAircraftReload();
     virtual std::shared_ptr<LVGLToolkit> createGUIToolkit() = 0;
     virtual void createMenu(const std::string &name) = 0;
@@ -105,6 +108,7 @@ private:
     std::shared_future<std::shared_ptr<xdata::World>> navWorldFuture;
     std::shared_ptr<xdata::World> navWorld;
     std::atomic_bool navWorldLoadAttempted {false};
+    std::shared_ptr<ivao::IVAO> ivao;
 
     bool stopped = false;
 
