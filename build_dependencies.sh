@@ -71,7 +71,7 @@ echo "Building curl..."
 if [ ! -f $OUTDIR/lib/libcurl.a ]; then
     cd curl
     ./buildconf
-    ./configure --prefix=$OUTDIR --without-ssl --without-nghttp2 --with-mbedtls=$OUTDIR --with-zlib="`pwd`/../mupdf/thirdparty/zlib/" --without-libpsl --disable-ldap --without-brotli --without-winidn --without-libidn2 --disable-shared --disable-crypto-auth --disable-ftp --disable-telnet --disable-gopher --disable-dict --disable-imap --disable-pop3 --disable-rtsp --disable-smtp --disable-tftp
+    ./configure --prefix=$OUTDIR --without-ssl --without-nghttp2 --with-mbedtls=$OUTDIR --with-zlib="`pwd`/../mupdf/thirdparty/zlib/" --without-libpsl --disable-ldap --without-brotli --without-winidn --without-libidn2 --disable-shared --disable-crypto-auth --disable-ftp --disable-telnet --disable-gopher --disable-dict --disable-imap --disable-pop3 --disable-rtsp --disable-smtp --disable-tftp --without-librtmp
     CFLAGS=-fPIC make -j10 install
     cd ..
 fi
